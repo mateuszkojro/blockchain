@@ -21,7 +21,7 @@ public class Blockchain
 
     Transaction[] FindUnspendTransactions(string address)
     {
-        var spentTransactions = new Dictionary<string, int[]>();
+        var spentTransactions = new Dictionary<string, List<int>>();
         var unspentTx = new List<Transaction>();
         foreach (var block in Blocks)
         {
@@ -58,14 +58,15 @@ public class Blockchain
                             string inTxId = Utils.ByteArrayToString(input.TransactionId);
                             if (spentTransactions[inTxId] == null)
                             {
-                                spentTransactions[inTxId] = new int[] { input.Vout };
+                                spentTransactions[inTxId] = new List<int> { input.Vout };
                             }
                             else
                             {
+                                // TODO: Is that required?
                                 // var tmp = spentTransactions[inTxId];
                                 // Array.Resize(ref tmp, tmp.Length + 1);
                                 // tmp[tmp.Length - 1] = input.Vout;
-                                spentTransactions[inTxId].Append(input.Vout);
+                                spentTransactions[inTxId].Add(input.Vout);
                             }
                         }
                     }
