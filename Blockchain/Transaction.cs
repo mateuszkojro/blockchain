@@ -11,6 +11,11 @@ public class TxInput
         Vout = vout;
         scriptSig = data;
     }
+
+    public bool CanUnlockOutputWith(string unlockingData)
+    {
+        return scriptSig == unlockingData;
+    }
 }
 
 public class TxOutput
@@ -19,6 +24,11 @@ public class TxOutput
     {
         this.amount = amount;
         this.scriptPubKey = scriptPubKey;
+    }
+
+    public bool CanBeUnlockedWith(string unlockingData)
+    {
+        return scriptPubKey == unlockingData;
     }
 
     public Int64 amount { get; }
@@ -39,8 +49,14 @@ public class Transaction
         return tx;
     }
     public byte[] id { get; }
-    TxInput[] Vin;
-    TxOutput[] Vout;
+    public TxInput[] Vin;
+    public TxOutput[] Vout;
+
+    public bool IsCoinbase()
+    {
+        throw new NotImplementedException(); // Not checked in the original code
+        return Vin.Length == 1 && Vin[0].TransactionId.Length == 0 && Vin[0].Vout == -1;
+    }
 
     byte[] GenerateId()
     {

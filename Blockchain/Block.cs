@@ -5,16 +5,16 @@ namespace Blockchain;
 public class Block
 {
     readonly Int64 _timestamp;
-    Transaction[] _transactions;
+    public Transaction[] Transactions { get; }
     readonly byte[] _data;
 
-    readonly byte[] _previousBlockHash;
+    public readonly byte[] PreviousBlockHash;
     public byte[] Hash { get; }
     public Int64 Nonce { get; }
 
     public byte[] HashTransactions() {
         var result = new List<byte>();
-        foreach (var transaction in _transactions)
+        foreach (var transaction in Transactions)
         {
             result.AddRange(transaction.id);
         }
@@ -35,10 +35,10 @@ public class Block
 
     private Block(byte[] data, byte[] previousBlockHash, Int64 nonce, Transaction[] transactions)
     {
-        _transactions = transactions;
+        Transactions = transactions;
         _timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         _data = data;
-        _previousBlockHash = previousBlockHash;
+        PreviousBlockHash = previousBlockHash;
         Hash = CalcHash(_timestamp, data, previousBlockHash);
         Nonce = nonce;
     }
@@ -54,8 +54,8 @@ public class Block
         _timestamp = readyBlock._timestamp;
         _data = readyBlock._data;
         Hash = readyBlock.Hash;
-        _previousBlockHash = readyBlock._previousBlockHash;
-        _transactions = readyBlock._transactions;
+        PreviousBlockHash = readyBlock.PreviousBlockHash;
+        Transactions = readyBlock.Transactions;
     }
 
     public override string ToString()
