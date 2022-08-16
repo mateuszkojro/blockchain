@@ -5,11 +5,22 @@ namespace Blockchain;
 public class Block
 {
     readonly Int64 _timestamp;
+    Transaction[] _transactions;
     readonly byte[] _data;
 
     readonly byte[] _previousBlockHash;
     public byte[] Hash { get; }
     public Int64 Nonce { get; }
+
+    public byte[] HashTransactions() {
+        var result = new List<byte>();
+        foreach (var transaction in _transactions)
+        {
+            result.AddRange(transaction.id);
+        }
+
+        return Utils.Sha256(result.ToArray());
+    }
 
     static byte[] CalcHash(Int64 timestamp, byte[] data, byte[] previousBlockHash)
     {
@@ -22,8 +33,9 @@ public class Block
         return Utils.Sha256(result.ToArray());
     }
 
-    private Block(byte[] data, byte[] previousBlockHash, Int64 nonce)
+    private Block(byte[] data, byte[] previousBlockHash, Int64 nonce, Transaction[] transactions)
     {
+        _transactions = transactions;
         _timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         _data = data;
         _previousBlockHash = previousBlockHash;
@@ -31,10 +43,10 @@ public class Block
         Nonce = nonce;
     }
 
-    public Block(byte[] data, byte[] previousBlockHash)
+    public Block(byte[] data, byte[] previousBlockHash, Transaction[] transactions)
     {
         // Create the proof of work
-        var proofOfWork = new ProofOfWork(new Block(data, previousBlockHash, 0));
+        var proofOfWork = new ProofOfWork(new Block(data, previousBlockHash, 0, transactions));
         Nonce = proofOfWork.Run();
 
         // Copy the block with the proof to `this`
@@ -43,6 +55,7 @@ public class Block
         _data = readyBlock._data;
         Hash = readyBlock.Hash;
         _previousBlockHash = readyBlock._previousBlockHash;
+        _transactions = readyBlock._transactions;
     }
 
     public override string ToString()

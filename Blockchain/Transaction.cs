@@ -1,6 +1,6 @@
 namespace Blockchain;
 
-class TxInput
+public class TxInput
 {
     public byte[] TransactionId { get; }
     public int Vout { get; }
@@ -13,7 +13,7 @@ class TxInput
     }
 }
 
-class TxOutput
+public class TxOutput
 {
     public TxOutput(long amount, string scriptPubKey)
     {
@@ -25,11 +25,12 @@ class TxOutput
     public string scriptPubKey { get; } // User defined wallet address
 }
 
-class Transaction
+public class Transaction
 {
-    static Transaction CreateCoinbaseTx(string to, string? data)
+    public static Transaction CreateCoinbaseTx(string to, string? data)
     {
-        if(data is null) {
+        if (data is null)
+        {
             data = $"Reward to {to}";
         }
         var txin = new TxInput(new byte[] { }, -1, data);
@@ -37,7 +38,7 @@ class Transaction
         var tx = new Transaction(new[] { txin }, new[] { txout });
         return tx;
     }
-    byte[] id;
+    public byte[] id { get; }
     TxInput[] Vin;
     TxOutput[] Vout;
 

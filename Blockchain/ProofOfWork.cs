@@ -32,6 +32,7 @@ public class ProofOfWork
     {
         var result = new List<byte>();
         result.AddRange(Block.Hash);
+        result.AddRange(Block.HashTransactions());
         result.AddRange(Utils.Int64ToByteArray(TargetBytes));
         result.AddRange(Utils.Int64ToByteArray(nonce));
         return result.ToArray();

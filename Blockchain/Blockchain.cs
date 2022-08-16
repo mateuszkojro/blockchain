@@ -11,13 +11,13 @@ public class Blockchain
         Blocks = new List<Block> { genesisBlock };
     }
 
-    public Block AddBlock(byte[] data)
-    {
-        var previousBlockHash = Blocks.Last().Hash;
+    // public Block AddBlock(byte[] data)
+    // {
+    //     var previousBlockHash = Blocks.Last().Hash;
 
-        Blocks.Add(new Block(data, previousBlockHash));
-        return Blocks.Last();
-    }
+    //     Blocks.Add(new Block(data, previousBlockHash));
+    //     return Blocks.Last();
+    // }
 
     public override string ToString()
     {
